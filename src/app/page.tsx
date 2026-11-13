@@ -1,69 +1,63 @@
-import Image from "next/image";
+"use client";
 
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { ConfiguredBookingPortal } from "@/components/booking-portal";
+
+type ServiceId = "strength" | "conditioning" | "foundation";
+const services = [
+  { id: "strength" as const, title: "Strength, with purpose.", category: "PERSONAL TRAINING", duration: "60 min", price: 45, description: "Build confidence under the bar. A focused, one-to-one session shaped around your goals.", detail: "Strength & technique", number: "01" },
+  { id: "conditioning" as const, title: "Find your next gear.", category: "CONDITIONING", duration: "45 min", price: 35, description: "Move better, go further. A challenging mix of functional movement and conditioning.", detail: "Functional conditioning", number: "02" },
+  { id: "foundation" as const, title: "Start on solid ground.", category: "FIRST SESSION", duration: "30 min", price: 0, description: "Meet your coach, talk through your goals, and find a starting point that feels right.", detail: "Introduction & goal setting", number: "03" },
+];
 export default function Home() {
+  const [view, setView] = useState<"home" | "book" | "sessions">("home");
+  const [serviceId, setServiceId] = useState<ServiceId>("strength");
+  function openBooking(id: ServiceId = "strength") {
+    setServiceId(id);
+    setView("book");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <div className="demo-bar">Portfolio prototype · Fictional coach · Account bookings saved securely</div>
+      <header className="header">
+        <button className="wordmark" onClick={() => setView("home")} aria-label="Forma home">forma<span>®</span></button>
+        <nav aria-label="Main navigation">
+          <button className={view === "home" ? "nav-active" : ""} onClick={() => setView("home")}>The studio</button>
+          <button className={view === "book" ? "nav-active" : ""} onClick={() => openBooking()}>Sessions</button>
+          <button className={view === "sessions" ? "nav-active" : ""} onClick={() => { setView("sessions"); }}>My bookings</button>
+          <Link href="/account" className="account-nav">Account</Link>
+        </nav>
+        <button className="button dark header-cta" onClick={() => openBooking()}>Book a session <span>↗</span></button>
+      </header>
+      <main id="main">
+        {view === "home" && <>
+          <section className="hero">
+            <div className="hero-copy">
+              <div className="eyebrow"><span className="dot" /> INDEPENDENT COACHING. PERSONAL PROGRESS.</div>
+              <h1>Show up.<br />Get stronger.<br /><span>Feel like you.</span></h1>
+              <p>Personal training that meets you where you are.<br className="desktop-break" /> A clear plan. A coach in your corner. Your next chapter.</p>
+              <div className="hero-actions"><button className="button lime" onClick={() => openBooking("foundation")}>Find your starting point <span>↗</span></button><a href="#sessions" className="text-link">Explore sessions <span>↓</span></a></div>
+              <div className="coach-line"><div className="coach-monogram">AC</div><div><strong>Alex Carter</strong><span>Your coach. Every session.</span></div><span className="coach-stamp">ONE TO ONE.<br />ALL ABOUT YOU.</span></div>
+            </div>
+            <div className="hero-image">
+              <Image src="/images/studio.jpg" alt="Training studio with strength equipment and free weights" fill priority sizes="(max-width: 800px) 100vw, 50vw" />
+              <div className="image-top"><span>THE FORMA STUDIO</span><span>MOVE WITH INTENTION ↗</span></div>
+              <div className="image-caption"><span>Less noise.<br />More progress.</span><div className="image-mark">f.</div></div>
+            </div>
+          </section>
+          <div className="principles"><span>BUILT AROUND YOU</span><p>Real coaching <i>✳</i> Sustainable strength <i>✳</i> Progress at your pace</p><span>NO TWO JOURNEYS ALIKE ↗</span></div>
+          <section className="services section" id="sessions">
+            <div className="section-heading"><div><div className="eyebrow">MAKE TIME FOR YOURSELF</div><h2>A little structure.<br />A lot of possibility.</h2></div><p>Choose your focus. We’ll take it from there.<br />Every session is one-to-one and built around you.</p></div>
+            <div className="service-grid">{services.map(item => <article className="service-card" key={item.id}><div className="card-top"><span>{item.category}</span><span className="service-symbol">{item.number === "01" ? "↗" : item.number === "02" ? "✳" : "+"}</span></div><h3>{item.title}</h3><p>{item.description}</p><div className="card-bottom"><span>{item.duration} <span className="separator">/</span> {item.price ? "£" + item.price : "Complimentary"}</span><button aria-label={"Book " + item.detail} onClick={() => openBooking(item.id)}>↗</button></div></article>)}</div>
+          </section>
+          <section className="closing section"><div><div className="eyebrow">YOUR NEXT CHAPTER STARTS SMALL</div><h2>You bring the effort.<br />I’ll bring the plan.</h2></div><button className="button dark" onClick={() => openBooking("foundation")}>Let’s get started <span>↗</span></button></section>
+        </>}
+        {view !== "home" && <ConfiguredBookingPortal key={view + serviceId} initialView={view} initialService={serviceId} />}
       </main>
-    </div>
+      <footer className="footer"><button className="wordmark" onClick={() => setView("home")}>forma<span>®</span></button><p>Stronger, on your terms.</p><span>Fictional studio · Portfolio prototype</span><Link href="/coach" className="text-link">Trainer workspace ↗</Link><a href="#main">Back to top ↑</a></footer>
+    </>
   );
 }

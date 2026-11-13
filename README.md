@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Forma
 
-## Getting Started
+A booking portal for an independent personal trainer, with a client account area and a protected trainer workspace.
 
-First, run the development server:
+## What it does
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Clients can create an account, choose a service and studio time, book a session, view their history and cancel a future booking. Trainers can search bookings, publish or hide availability and cancel client sessions.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The interface includes a shared calendar, quarter-hour time selection and mobile layouts. Session times use Europe/London. The database enforces one active booking per slot and preserves cancelled-session history.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Confirmation and cancellation emails are recorded in a private queue. A server-only Resend integration sends them with bounded retries and stable idempotency keys.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project status
 
-## Learn More
+Forma is a portfolio prototype for a fictional trainer. Payments are not enabled.
 
-To learn more about Next.js, take a look at the following resources:
+Local booking, trainer availability, cancellation, account recovery and test email delivery have been checked. Email testing uses Resend's test sender and redirects notifications to the configured test inbox. Sending to clients requires a verified sender domain.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Next.js · React · TypeScript · Tailwind CSS · Supabase Auth · PostgreSQL · Resend
 
-## Deploy on Vercel
+## Development
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Copy .env.example to .env.local, configure the separate Supabase project and install dependencies with npm install. Run npm run dev and open its printed URL.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Apply the SQL files in supabase/migrations in numerical order once per database. Use new migrations for later changes. The initial migration seeds 14 days of studio slots.
+
+Commands:
+
+- npm run lint — source checks.
+- npm test — disposable PostgreSQL permission and booking checks, plus mocked email-provider tests.
+- npm run build — production build.
+
+The tests use a minimal Supabase Auth identity stub. Real authentication, email inbox delivery and multi-connection concurrency require separate live verification.
+
+## Deployment
+
+See [Vercel deployment](docs/deployment.md) and [booking email setup](docs/booking-emails.md).
+
+Environment values belong in the host's environment manager. The Supabase secret, Resend key and scheduler secret are server-only.
+
+## Photography
+
+Studio photo from [Unsplash](https://unsplash.com), stored in public/images/studio.jpg.
