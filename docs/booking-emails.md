@@ -1,23 +1,20 @@
 # Booking email setup
 
-## Test without a domain
+## Configuration
 
-1. Create a Resend account and a sending API key.
-2. Apply supabase/migrations/005_booking_emails.sql once, after migrations 001–004.
-3. Set these server-only values in .env.local:
+The email outbox is introduced by migration `005_booking_emails.sql`, after migrations 001–004. Delivery uses these server-only settings:
 
-    SUPABASE_SECRET_KEY=your Supabase secret key (or legacy service_role key)
-    RESEND_API_KEY=your Resend sending key
-    FORMA_EMAIL_FROM=Forma <onboarding@resend.dev>
-    FORMA_EMAIL_MODE=test
-    FORMA_EMAIL_TEST_TO=the exact email used for your Resend account
+| Variable | Purpose |
+| --- | --- |
+| `SUPABASE_SECRET_KEY` | Supabase secret key or legacy service-role key |
+| `RESEND_API_KEY` | Resend sending key |
+| `FORMA_EMAIL_FROM` | Sender identity; test sender is `Forma <onboarding@resend.dev>` |
+| `FORMA_EMAIL_MODE` | `test` redirects notifications; `live` sends to clients |
+| `FORMA_EMAIL_TEST_TO` | Resend account inbox for test delivery |
 
-4. Restart the app. Create a NEW fictional booking, confirm the email arrives, then cancel it and confirm the cancellation email arrives.
-5. Check Resend's email dashboard if delivery is delayed.
+The test sender can email only the address associated with the Resend account. Every test notification is redirected to `FORMA_EMAIL_TEST_TO` and its subject starts with `[TEST]`. Supabase authentication emails use separate Supabase settings.
 
-The test sender can email only the address associated with your Resend account. In test mode every notification is redirected to FORMA_EMAIL_TEST_TO and its subject starts with [TEST]. Supabase authentication emails continue using Supabase's existing settings.
-
-SUPABASE_SECRET_KEY and RESEND_API_KEY must stay server-only. Do not add NEXT_PUBLIC_ prefixes. Environment files are ignored by Git.
+Email credentials remain server-only and are excluded from version control. Delivery verification uses a new fictional booking and cancellation, with provider status and inbox receipt checked independently.
 
 ## Queue and retries
 

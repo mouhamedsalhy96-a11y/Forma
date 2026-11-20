@@ -1,5 +1,4 @@
 -- Forma initial schema: one fictional coach, explicit published slots.
--- Run once in the SQL Editor of the separate Forma project.
 begin;
 
 create table public.studio_services (

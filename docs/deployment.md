@@ -6,7 +6,7 @@ Import the Forma GitHub repository into Vercel. Use the Next.js preset and the r
 
 ## Environment
 
-Copy these values from your local environment into Vercel's Production environment:
+The production environment requires:
 
 - NEXT_PUBLIC_SUPABASE_URL
 - NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
@@ -18,7 +18,7 @@ Copy these values from your local environment into Vercel's Production environme
 
 Keep FORMA_EMAIL_MODE=test while using onboarding@resend.dev. FORMA_EMAIL_TEST_TO must match the Resend account email. Test mode redirects every booking email to that inbox.
 
-SUPABASE_SECRET_KEY and RESEND_API_KEY must never have NEXT_PUBLIC_ prefixes. Do not paste them into GitHub, SQL queries or client code. Local .env.local is ignored by Git.
+SUPABASE_SECRET_KEY and RESEND_API_KEY must never have NEXT_PUBLIC_ prefixes. They are excluded from version control and browser code. Local .env.local is ignored by Git.
 
 Do not enable these email credentials on untrusted preview deployments connected to production customer data. Use a separate test Supabase project for such previews.
 
@@ -29,7 +29,7 @@ After Vercel provides the production URL, set Supabase Authentication's Site URL
 - https://YOUR-SITE.vercel.app/auth/callback
 - https://YOUR-SITE.vercel.app/auth/callback?next=/account/reset-password
 
-Retain exact localhost redirects if local development still needs them. The project database already has migrations 001 through 005 applied; do not rerun them.
+Retain exact localhost redirects if local development still needs them. Migrations 001 through 005 are applied once per database, in order.
 
 ## Verify the deployed app
 

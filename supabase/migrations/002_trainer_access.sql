@@ -1,4 +1,4 @@
--- Run after 001_initial_booking.sql. Trainer membership is assigned only via SQL.
+-- Trainer membership is administrator-managed; signup does not grant access.
 begin;
 create table public.studio_trainers (
   user_id uuid primary key references auth.users(id) on delete cascade,
@@ -24,9 +24,3 @@ create policy services_trainer_read on public.studio_services
     exists (select 1 from public.studio_trainers where user_id = (select auth.uid()))
   );
 commit;
-
--- After this migration, assign your existing test account in a SEPARATE query:
--- insert into public.studio_trainers (user_id)
--- select id from auth.users where email = 'REPLACE_WITH_YOUR_ACCOUNT_EMAIL'
--- on conflict (user_id) do nothing;
--- Confirm one row was inserted. Signing up never grants trainer membership.

@@ -18,21 +18,18 @@ Local booking, trainer availability, cancellation, account recovery and test ema
 
 ## Stack
 
-Next.js · React · TypeScript · Tailwind CSS · Supabase Auth · PostgreSQL · Resend
+Next.js Â· React Â· TypeScript Â· Tailwind CSS Â· Supabase Auth Â· PostgreSQL Â· Resend
 
-## Development
+## Project links
 
-Copy .env.example to .env.local, configure the separate Supabase project and install dependencies with npm install. Run npm run dev and open its printed URL.
+- [Live demonstration](https://forma-khaki-ten.vercel.app/)
+- [Source repository](https://github.com/mouhamedsalhy96-a11y/Forma)
 
-Apply the SQL files in supabase/migrations in numerical order once per database. Use new migrations for later changes. The initial migration seeds 14 days of studio slots.
+## Verification
 
-Commands:
+`npm run lint` checks the source; `npm test` covers booking permissions and mocked email-provider behavior; `npm run build` produces the deployment build.
 
-- npm run lint — source checks.
-- npm test — disposable PostgreSQL permission and booking checks, plus mocked email-provider tests.
-- npm run build — production build.
-
-The tests use a minimal Supabase Auth identity stub. Real authentication, email inbox delivery and multi-connection concurrency require separate live verification.
+Database tests use a minimal Supabase Auth identity stub. Real authentication, inbox delivery and multi-connection concurrency require separate live verification.
 
 ## Deployment
 
